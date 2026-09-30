@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/login")({ head: () => ({ meta: [{ title: "Sign in — Studio Funnel" }, { name: "description", content: "Sign in to your Studio Funnel workspace." }, { property: "og:title", content: "Sign in — Studio Funnel" }, { property: "og:description", content: "Access your permanent makeup studio workspace." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <PageShell eyebrow="Welcome back" title="Sign in to your studio." description="Your leads, client conversations, and bookings will be waiting here." /> });
