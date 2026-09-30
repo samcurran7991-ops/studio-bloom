@@ -33,8 +33,8 @@ export function BeforeAfterSlider({ before, after, label = "Compare before and a
   const [position, setPosition] = React.useState(50);
   const layer = (src: string | undefined, kind: "before" | "after") => src
     ? <img src={src} alt={kind === "before" ? "Before treatment" : "Healed result"} loading="lazy" width={1024} height={768} className="absolute inset-0 size-full object-cover" />
-    : <div aria-hidden className={cn("absolute inset-0 flex items-center justify-center", kind === "before" ? "bg-muted" : "bg-secondary")}>
-        <span className={cn("font-display text-sm italic text-muted-foreground", kind === "before" ? "-translate-x-1/4" : "translate-x-1/4")}>{kind === "before" ? "Before photo" : "Healed photo"}</span>
+    : <div aria-hidden className={cn("absolute inset-0", kind === "before" ? "bg-muted" : "bg-secondary")}>
+        <span className={cn("absolute top-4 font-display text-sm italic text-muted-foreground", kind === "before" ? "left-4" : "right-4")}>{kind === "before" ? "Before photo" : "Healed photo"}</span>
       </div>;
   return <div className={cn("relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted shadow-soft", className)}>
     {layer(after, "after")}
