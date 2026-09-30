@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/app/$view/")({ head: ({ params }) => ({ meta: [{ title: `${params.view} — Studio Funnel App` }, { name: "description", content: `Your ${params.view} view in Studio Funnel.` }, { property: "og:title", content: `${params.view} — Studio Funnel App` }, { property: "og:description", content: `A focused mobile view for studio ${params.view}.` }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: ViewPage });
+function ViewPage(){ const { view }=Route.useParams(); return <PageShell eyebrow="App view" title={view.replaceAll("-", " ")} description="This focused studio view is ready for its workflow."/> }

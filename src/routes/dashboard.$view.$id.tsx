@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/dashboard/$view/$id")({ head: ({ params }) => ({ meta: [{ title: `${params.id} — ${params.view} — Studio Funnel` }, { name: "description", content: "A detailed Studio Funnel dashboard record." }, { property: "og:title", content: `Studio Funnel ${params.view} detail` }, { property: "og:description", content: "Review this studio record in detail." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: DetailPage });
+function DetailPage(){ const { view, id }=Route.useParams(); return <PageShell eyebrow={`${view} detail`} title={id.replaceAll("-", " ")} description="Client context, history, notes, and next actions will come together here."/> }
