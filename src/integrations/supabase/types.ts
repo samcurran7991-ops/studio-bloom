@@ -527,6 +527,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_studio: {
+        Args: { p_config: Json; p_slug: string }
+        Returns: string
+      }
       disconnect_account: {
         Args: { p_provider: string; p_studio: string }
         Returns: undefined
@@ -542,6 +546,7 @@ export type Database = {
       get_ingest_key: { Args: { p_studio: string }; Returns: string }
       get_public_studio: { Args: { p_slug: string }; Returns: Json }
       is_member: { Args: { p_studio: string }; Returns: boolean }
+      slug_available: { Args: { p_slug: string }; Returns: boolean }
       submit_lead: { Args: { p_lead: Json; p_slug: string }; Returns: string }
       to_e164: { Args: { p: string }; Returns: string }
       track_step: {
