@@ -29,14 +29,20 @@ export function StatTile({ label, value, change }: { label: string; value: strin
   return <div className="rounded-2xl border bg-card p-5 shadow-soft"><div className="flex items-center justify-between"><span className="text-xs font-semibold uppercase text-muted-foreground">{label}</span><TrendingUp className="size-4 text-success" /></div><div className="mt-4 font-display text-4xl">{value}</div>{change && <p className="mt-2 text-xs font-semibold text-success">{change}</p>}</div>;
 }
 
-export function BeforeAfterSlider({ before, after }: { before: string; after: string }) {
-  const [position, setPosition] = React.useState(52);
-  return <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted shadow-soft">
-    <img src={after} alt="Healed permanent makeup result" loading="lazy" width={1024} height={768} className="absolute inset-0 size-full object-cover" />
-    <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${position}%` }}><img src={before} alt="Before permanent makeup treatment" loading="lazy" width={1024} height={768} className="h-full max-w-none object-cover" style={{ width: "calc((100vw - 48px) * 0.58)", minWidth: "560px" }} /></div>
-    <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-card shadow" style={{ left: `${position}%` }}><span className="absolute left-1/2 top-1/2 flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-card text-primary shadow-lift">↔</span></div>
-    <span className="absolute bottom-3 left-3 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold">Before</span><span className="absolute bottom-3 right-3 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold">After</span>
-    <input aria-label="Compare before and after" type="range" min="5" max="95" value={position} onChange={(event) => setPosition(Number(event.target.value))} className="absolute inset-0 size-full cursor-ew-resize opacity-0" />
+export function BeforeAfterSlider({ before, after, label = "Compare before and after", className }: { before?: string; after?: string; label?: string; className?: string }) {
+  const [position, setPosition] = React.useState(50);
+  const layer = (src: string | undefined, kind: "before" | "after") => src
+    ? <img src={src} alt={kind === "before" ? "Before treatment" : "Healed result"} loading="lazy" width={1024} height={768} className="absolute inset-0 size-full object-cover" />
+    : <div aria-hidden className={cn("absolute inset-0 flex items-center justify-center", kind === "before" ? "bg-muted" : "bg-secondary")}>
+        <span className={cn("font-display text-sm italic text-muted-foreground", kind === "before" ? "-translate-x-1/4" : "translate-x-1/4")}>{kind === "before" ? "Before photo" : "Healed photo"}</span>
+      </div>;
+  return <div className={cn("relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted shadow-soft", className)}>
+    {layer(after, "after")}
+    <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}>{layer(before, "before")}</div>
+    <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-card" style={{ left: `${position}%` }}><span className="absolute left-1/2 top-1/2 flex size-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-card text-primary shadow-lift">↔</span></div>
+    <span className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-foreground">Before</span><span className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-foreground">Healed</span>
+    <input aria-label={label} type="range" min="5" max="95" value={position} onChange={(event) => setPosition(Number(event.target.value))} className="peer absolute inset-0 size-full cursor-ew-resize opacity-0" />
+    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-ring peer-focus-visible:ring-2" />
   </div>;
 }
 
