@@ -10,15 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StyleguideRouteImport } from './routes/styleguide'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppViewRouteImport } from './routes/app.$view'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardViewRouteImport } from './routes/dashboard.$view'
 import { Route as SSlugRouteImport } from './routes/s.$slug'
+import { Route as AppViewIndexRouteImport } from './routes/app.$view.index'
+import { Route as AppViewIdRouteImport } from './routes/app.$view.$id'
+import { Route as DashboardViewIndexRouteImport } from './routes/dashboard.$view.index'
+import { Route as DashboardViewIdRouteImport } from './routes/dashboard.$view.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -41,19 +61,69 @@ const StyleguideRoute = StyleguideRouteImport.update({
   path: '/styleguide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppViewRoute = AppViewRouteImport.update({
+  id: '/$view',
+  path: '/$view',
+  getParentRoute: () => AppRoute,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardViewRoute = DashboardViewRouteImport.update({
+  id: '/$view',
+  path: '/$view',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const SSlugRoute = SSlugRouteImport.update({
   id: '/s/$slug',
   path: '/s/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppViewIndexRoute = AppViewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppViewRoute,
+} as any)
+const AppViewIdRoute = AppViewIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppViewRoute,
+} as any)
+const DashboardViewIndexRoute = DashboardViewIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardViewRoute,
+} as any)
+const DashboardViewIdRoute = DashboardViewIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => DashboardViewRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/signup': typeof SignupRoute
   '/styleguide': typeof StyleguideRoute
+  '/app/$view': typeof AppViewRouteWithChildren
+  '/dashboard/$view': typeof DashboardViewRouteWithChildren
   '/s/$slug': typeof SSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/app/$view/$id': typeof AppViewIdRoute
+  '/dashboard/$view/$id': typeof DashboardViewIdRoute
+  '/app/$view/': typeof AppViewIndexRoute
+  '/dashboard/$view/': typeof DashboardViewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,34 +132,89 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/styleguide': typeof StyleguideRoute
   '/s/$slug': typeof SSlugRoute
+  '/app': typeof AppIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/app/$view/$id': typeof AppViewIdRoute
+  '/dashboard/$view/$id': typeof DashboardViewIdRoute
+  '/app/$view': typeof AppViewIndexRoute
+  '/dashboard/$view': typeof DashboardViewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/signup': typeof SignupRoute
   '/styleguide': typeof StyleguideRoute
+  '/app/$view': typeof AppViewRouteWithChildren
+  '/dashboard/$view': typeof DashboardViewRouteWithChildren
   '/s/$slug': typeof SSlugRoute
+  '/app/': typeof AppIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/app/$view/$id': typeof AppViewIdRoute
+  '/dashboard/$view/$id': typeof DashboardViewIdRoute
+  '/app/$view/': typeof AppViewIndexRoute
+  '/dashboard/$view/': typeof DashboardViewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/login' | '/onboarding' | '/signup' | '/styleguide' | '/s/$slug'
+    | '/'
+    | '/app'
+    | '/dashboard'
+    | '/login'
+    | '/onboarding'
+    | '/signup'
+    | '/styleguide'
+    | '/app/$view'
+    | '/dashboard/$view'
+    | '/s/$slug'
+    | '/app/'
+    | '/dashboard/'
+    | '/app/$view/$id'
+    | '/dashboard/$view/$id'
+    | '/app/$view/'
+    | '/dashboard/$view/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/onboarding' | '/signup' | '/styleguide' | '/s/$slug'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/login'
     | '/onboarding'
     | '/signup'
     | '/styleguide'
     | '/s/$slug'
+    | '/app'
+    | '/dashboard'
+    | '/app/$view/$id'
+    | '/dashboard/$view/$id'
+    | '/app/$view'
+    | '/dashboard/$view'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/dashboard'
+    | '/login'
+    | '/onboarding'
+    | '/signup'
+    | '/styleguide'
+    | '/app/$view'
+    | '/dashboard/$view'
+    | '/s/$slug'
+    | '/app/'
+    | '/dashboard/'
+    | '/app/$view/$id'
+    | '/dashboard/$view/$id'
+    | '/app/$view/'
+    | '/dashboard/$view/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
   SignupRoute: typeof SignupRoute
@@ -104,6 +229,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -134,6 +273,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StyleguideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/$view': {
+      id: '/app/$view'
+      path: '/$view'
+      fullPath: '/app/$view'
+      preLoaderRoute: typeof AppViewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/$view': {
+      id: '/dashboard/$view'
+      path: '/$view'
+      fullPath: '/dashboard/$view'
+      preLoaderRoute: typeof DashboardViewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/s/$slug': {
       id: '/s/$slug'
       path: '/s/$slug'
@@ -141,11 +308,94 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/$view/': {
+      id: '/app/$view/'
+      path: '/'
+      fullPath: '/app/$view/'
+      preLoaderRoute: typeof AppViewIndexRouteImport
+      parentRoute: typeof AppViewRoute
+    }
+    '/app/$view/$id': {
+      id: '/app/$view/$id'
+      path: '/$id'
+      fullPath: '/app/$view/$id'
+      preLoaderRoute: typeof AppViewIdRouteImport
+      parentRoute: typeof AppViewRoute
+    }
+    '/dashboard/$view/': {
+      id: '/dashboard/$view/'
+      path: '/'
+      fullPath: '/dashboard/$view/'
+      preLoaderRoute: typeof DashboardViewIndexRouteImport
+      parentRoute: typeof DashboardViewRoute
+    }
+    '/dashboard/$view/$id': {
+      id: '/dashboard/$view/$id'
+      path: '/$id'
+      fullPath: '/dashboard/$view/$id'
+      preLoaderRoute: typeof DashboardViewIdRouteImport
+      parentRoute: typeof DashboardViewRoute
+    }
   }
 }
 
+interface AppViewRouteChildren {
+  AppViewIdRoute: typeof AppViewIdRoute
+  AppViewIndexRoute: typeof AppViewIndexRoute
+}
+
+const AppViewRouteChildren: AppViewRouteChildren = {
+  AppViewIdRoute: AppViewIdRoute,
+  AppViewIndexRoute: AppViewIndexRoute,
+}
+
+const AppViewRouteWithChildren =
+  AppViewRoute._addFileChildren(AppViewRouteChildren)
+
+interface AppRouteChildren {
+  AppViewRoute: typeof AppViewRouteWithChildren
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppViewRoute: AppViewRouteWithChildren,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface DashboardViewRouteChildren {
+  DashboardViewIdRoute: typeof DashboardViewIdRoute
+  DashboardViewIndexRoute: typeof DashboardViewIndexRoute
+}
+
+const DashboardViewRouteChildren: DashboardViewRouteChildren = {
+  DashboardViewIdRoute: DashboardViewIdRoute,
+  DashboardViewIndexRoute: DashboardViewIndexRoute,
+}
+
+const DashboardViewRouteWithChildren = DashboardViewRoute._addFileChildren(
+  DashboardViewRouteChildren,
+)
+
+interface DashboardRouteChildren {
+  DashboardViewRoute: typeof DashboardViewRouteWithChildren
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardViewRoute: DashboardViewRouteWithChildren,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
   SignupRoute: SignupRoute,
