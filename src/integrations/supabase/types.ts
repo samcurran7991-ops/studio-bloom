@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      followups: {
+        Row: {
+          created_at: string
+          id: string
+          lead_id: string
+          next_at: string | null
+          status: string
+          step: number
+          stop_reason: string | null
+          studio_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_id: string
+          next_at?: string | null
+          status?: string
+          step?: number
+          stop_reason?: string | null
+          studio_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_id?: string
+          next_at?: string | null
+          status?: string
+          step?: number
+          stop_reason?: string | null
+          studio_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "followups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: true
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "followups_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       funnel_events: {
         Row: {
           created_at: string
@@ -100,11 +148,14 @@ export type Database = {
           campaign: string | null
           created_at: string
           email: string | null
+          has_unread: boolean
           id: string
           kind: string
+          last_message_at: string | null
           message: string | null
           name: string
           phone: string
+          phone_e164: string | null
           preferred_day: string | null
           preferred_time: string | null
           quiz: Json
@@ -119,11 +170,14 @@ export type Database = {
           campaign?: string | null
           created_at?: string
           email?: string | null
+          has_unread?: boolean
           id?: string
           kind: string
+          last_message_at?: string | null
           message?: string | null
           name: string
           phone: string
+          phone_e164?: string | null
           preferred_day?: string | null
           preferred_time?: string | null
           quiz?: Json
@@ -138,11 +192,14 @@ export type Database = {
           campaign?: string | null
           created_at?: string
           email?: string | null
+          has_unread?: boolean
           id?: string
           kind?: string
+          last_message_at?: string | null
           message?: string | null
           name?: string
           phone?: string
+          phone_e164?: string | null
           preferred_day?: string | null
           preferred_time?: string | null
           quiz?: Json
@@ -155,6 +212,124 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "leads_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          direction: string
+          error: string | null
+          id: string
+          lead_id: string | null
+          provider_id: string | null
+          sent_by: string | null
+          status: string
+          studio_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          direction: string
+          error?: string | null
+          id?: string
+          lead_id?: string | null
+          provider_id?: string | null
+          sent_by?: string | null
+          status?: string
+          studio_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          direction?: string
+          error?: string | null
+          id?: string
+          lead_id?: string | null
+          provider_id?: string | null
+          sent_by?: string | null
+          status?: string
+          studio_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      opt_outs: {
+        Row: {
+          created_at: string
+          phone_e164: string
+          studio_id: string
+        }
+        Insert: {
+          created_at?: string
+          phone_e164: string
+          studio_id: string
+        }
+        Update: {
+          created_at?: string
+          phone_e164?: string
+          studio_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opt_outs_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          studio_id: string
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          studio_id: string
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          studio_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_subscriptions_studio_id_fkey"
             columns: ["studio_id"]
             isOneToOne: false
             referencedRelation: "studios"
@@ -194,6 +369,7 @@ export type Database = {
           created_at: string
           id: string
           ingest_key: string
+          messaging: Json
           slug: string
         }
         Insert: {
@@ -201,6 +377,7 @@ export type Database = {
           created_at?: string
           id?: string
           ingest_key?: string
+          messaging?: Json
           slug: string
         }
         Update: {
@@ -208,6 +385,7 @@ export type Database = {
           created_at?: string
           id?: string
           ingest_key?: string
+          messaging?: Json
           slug?: string
         }
         Relationships: []
@@ -225,9 +403,11 @@ export type Database = {
           step: string
         }[]
       }
+      get_ingest_key: { Args: { p_studio: string }; Returns: string }
       get_public_studio: { Args: { p_slug: string }; Returns: Json }
       is_member: { Args: { p_studio: string }; Returns: boolean }
       submit_lead: { Args: { p_lead: Json; p_slug: string }; Returns: string }
+      to_e164: { Args: { p: string }; Returns: string }
       track_step: {
         Args: {
           p_session: string
