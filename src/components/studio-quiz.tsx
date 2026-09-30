@@ -56,7 +56,7 @@ export function MatchQuiz({ studio, onExit, onDone, onStart }: { studio: Studio;
     body = (LOOKS[goal] ?? []).map(([id, t, h], i) => <OptionCard key={id} icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} hint={h} selected={a.look === id} onClick={() => answer({ look: id })} />);
   } else {
     heading = "Anything you're worried about?";
-    body = WORRIES.map(([id, t], i) => <OptionCard key={id} multi icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} selected={a.worries?.includes(id)} onClick={() => toggleWorry(id)} />);
+    body = WORRIES.map(([id, t], i) => <OptionCard key={id} multi icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} selected={!!a.worries?.includes(id)} onClick={() => toggleWorry(id)} />);
   }
 
   return <div className="mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-xl flex-col px-5 pb-10 pt-4 sm:px-6">
