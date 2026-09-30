@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/dashboard/$view/")({ head: ({ params }) => ({ meta: [{ title: `${params.view} — Studio Funnel Dashboard` }, { name: "description", content: `Your ${params.view} workspace in Studio Funnel.` }, { property: "og:title", content: `${params.view} — Studio Funnel` }, { property: "og:description", content: `Manage your studio ${params.view} in one calm workspace.` }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: ViewPage });
+function ViewPage(){ const { view }=Route.useParams(); return <PageShell eyebrow="Dashboard view" title={view.replaceAll("-", " ")} description="The focused workspace for this part of your studio will be built here."/> }

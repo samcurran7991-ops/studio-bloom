@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/s/$slug")({ head: ({ params }) => ({ meta: [{ title: `${params.slug} — Studio booking` }, { name: "description", content: "Explore treatments and request an appointment." }, { property: "og:title", content: `${params.slug} studio` }, { property: "og:description", content: "Explore permanent makeup treatments and request an appointment." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: StudioPage });
+function StudioPage(){ const { slug }=Route.useParams(); return <PageShell eyebrow="Studio page" title={slug.replaceAll("-", " ")} description="Treatments, artist details, healed work, and booking availability will live here."/> }

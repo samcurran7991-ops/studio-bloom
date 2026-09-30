@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PageShell } from "@/components/studio-funnel";
+export const Route = createFileRoute("/dashboard/")({ head: () => ({ meta: [{ title: "Dashboard — Studio Funnel" }, { name: "description", content: "A clear view of your PMU studio performance." }, { property: "og:title", content: "Dashboard — Studio Funnel" }, { property: "og:description", content: "A clear view of leads and bookings for your studio." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: () => <PageShell eyebrow="Overview" title="Your studio, at a glance." description="Key lead, booking, and revenue signals will be gathered here." /> });
