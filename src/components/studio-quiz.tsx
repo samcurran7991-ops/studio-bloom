@@ -32,7 +32,7 @@ export function MatchQuiz({ studio, onExit, onDone, onStart }: { studio: Studio;
     if (!started.current) { started.current = true; onStart(); }
     setA((prev) => {
       const next = { ...prev, ...patch };
-      if (patch.goal && patch.goal !== prev.goal) { next.cond = undefined; next.look = undefined; }
+      if (patch.goal && patch.goal !== prev.goal) { delete next.cond; delete next.look; }
       return next;
     });
     setStep((s) => s + 1);
@@ -42,21 +42,21 @@ export function MatchQuiz({ studio, onExit, onDone, onStart }: { studio: Studio;
     setA((p) => ({ ...p, worries: p.worries?.includes(id) ? p.worries.filter((w) => w !== id) : [...(p.worries ?? []), id] }));
   };
   const back = () => (step === 0 ? onExit() : setStep((s) => s - 1));
-  const finish = () => onDone({ goal: a.goal, cond: a.cond, look: a.look, worries: a.worries ?? [], match: matchService(a) });
+  const finish = () => onDone({ ...a, worries: a.worries ?? [], match: matchService(a) });
 
-  let heading = "", body: React.ReactNode = null;
+  let heading: string = "", body: React.ReactNode = null;
   if (step === 0) {
     heading = "What would you like to enhance?";
     body = GOALS.map(([id, t, h]) => <OptionCard key={id} icon={GOAL_ICONS[id] ?? Sparkles} title={t} hint={h} selected={a.goal === id} onClick={() => answer({ goal: id })} />);
   } else if (step === 1) {
-    heading = Q2[goal];
-    body = (CONDITIONS[goal] ?? []).map(([id, t], i) => <OptionCard key={id} icon={OPTION_ICONS[i % 4]} title={t} selected={a.cond === id} onClick={() => answer({ cond: id })} />);
+    heading = Q2[goal] ?? "";
+    body = (CONDITIONS[goal] ?? []).map(([id, t], i) => <OptionCard key={id} icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} selected={a.cond === id} onClick={() => answer({ cond: id })} />);
   } else if (step === 2) {
-    heading = Q3[goal];
-    body = (LOOKS[goal] ?? []).map(([id, t, h], i) => <OptionCard key={id} icon={OPTION_ICONS[i % 4]} title={t} hint={h} selected={a.look === id} onClick={() => answer({ look: id })} />);
+    heading = Q3[goal] ?? "";
+    body = (LOOKS[goal] ?? []).map(([id, t, h], i) => <OptionCard key={id} icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} hint={h} selected={a.look === id} onClick={() => answer({ look: id })} />);
   } else {
     heading = "Anything you're worried about?";
-    body = WORRIES.map(([id, t], i) => <OptionCard key={id} multi icon={OPTION_ICONS[i % 4]} title={t} selected={a.worries?.includes(id)} onClick={() => toggleWorry(id)} />);
+    body = WORRIES.map(([id, t], i) => <OptionCard key={id} multi icon={OPTION_ICONS[i % 4] ?? Sparkles} title={t} selected={a.worries?.includes(id)} onClick={() => toggleWorry(id)} />);
   }
 
   return <div className="mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-xl flex-col px-5 pb-10 pt-4 sm:px-6">
@@ -87,7 +87,7 @@ export type ResultAction = "booking" | "consult" | "lead" | "question";
 
 export function MatchResult({ studio, answers, onAction, onRetake }: { studio: Studio; answers: QuizAnswers; onAction: (a: ResultAction) => void; onRetake: () => void }) {
   const c = studio.config;
-  const s = serviceByKey(c, answers.match);
+  const s = serviceByKey(c, answers.match)!;
   const worries = (answers.worries ?? []).map((id) => ({ id, label: WORRIES.find((w) => w[0] === id)?.[1], faq: c.faqs.find((f) => f.id === id) })).filter((w) => w.faq);
   const review = c.reviews[answers.goal ?? ""] || c.reviews["any"];
 
