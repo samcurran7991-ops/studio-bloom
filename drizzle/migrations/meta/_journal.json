@@ -15,6 +15,13 @@
       "when": 1790755565908,
       "tag": "0001_0002_messaging",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790755620114,
+      "tag": "0002_0003_connections",
+      "breakpoints": true
     }
   ]
 }

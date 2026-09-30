@@ -14,6 +14,94 @@ export type Database = {
   }
   public: {
     Tables: {
+      connection_secrets: {
+        Row: {
+          access_token: string | null
+          expires_at: string | null
+          page_tokens: Json
+          provider: string
+          refresh_token: string | null
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string | null
+          expires_at?: string | null
+          page_tokens?: Json
+          provider: string
+          refresh_token?: string | null
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string | null
+          expires_at?: string | null
+          page_tokens?: Json
+          provider?: string
+          refresh_token?: string | null
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connection_secrets_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      connections: {
+        Row: {
+          account_name: string | null
+          connected_at: string
+          connected_by: string | null
+          details: Json
+          error: string | null
+          external_ids: string[]
+          last_event_at: string | null
+          provider: string
+          status: string
+          studio_id: string
+          updated_at: string
+        }
+        Insert: {
+          account_name?: string | null
+          connected_at?: string
+          connected_by?: string | null
+          details?: Json
+          error?: string | null
+          external_ids?: string[]
+          last_event_at?: string | null
+          provider: string
+          status?: string
+          studio_id: string
+          updated_at?: string
+        }
+        Update: {
+          account_name?: string | null
+          connected_at?: string
+          connected_by?: string | null
+          details?: Json
+          error?: string | null
+          external_ids?: string[]
+          last_event_at?: string | null
+          provider?: string
+          status?: string
+          studio_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connections_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       followups: {
         Row: {
           created_at: string
@@ -150,11 +238,13 @@ export type Database = {
           email: string | null
           has_unread: boolean
           id: string
+          ig_user_id: string | null
+          ig_username: string | null
           kind: string
           last_message_at: string | null
           message: string | null
           name: string
-          phone: string
+          phone: string | null
           phone_e164: string | null
           preferred_day: string | null
           preferred_time: string | null
@@ -172,11 +262,13 @@ export type Database = {
           email?: string | null
           has_unread?: boolean
           id?: string
+          ig_user_id?: string | null
+          ig_username?: string | null
           kind: string
           last_message_at?: string | null
           message?: string | null
           name: string
-          phone: string
+          phone?: string | null
           phone_e164?: string | null
           preferred_day?: string | null
           preferred_time?: string | null
@@ -194,11 +286,13 @@ export type Database = {
           email?: string | null
           has_unread?: boolean
           id?: string
+          ig_user_id?: string | null
+          ig_username?: string | null
           kind?: string
           last_message_at?: string | null
           message?: string | null
           name?: string
-          phone?: string
+          phone?: string | null
           phone_e164?: string | null
           preferred_day?: string | null
           preferred_time?: string | null
@@ -222,6 +316,7 @@ export type Database = {
       messages: {
         Row: {
           body: string
+          channel: string
           created_at: string
           direction: string
           error: string | null
@@ -234,6 +329,7 @@ export type Database = {
         }
         Insert: {
           body: string
+          channel?: string
           created_at?: string
           direction: string
           error?: string | null
@@ -246,6 +342,7 @@ export type Database = {
         }
         Update: {
           body?: string
+          channel?: string
           created_at?: string
           direction?: string
           error?: string | null
@@ -266,6 +363,41 @@ export type Database = {
           },
           {
             foreignKeyName: "messages_studio_id_fkey"
+            columns: ["studio_id"]
+            isOneToOne: false
+            referencedRelation: "studios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      oauth_states: {
+        Row: {
+          created_at: string
+          provider: string
+          return_to: string
+          state: string
+          studio_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          provider: string
+          return_to?: string
+          state: string
+          studio_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          provider?: string
+          return_to?: string
+          state?: string
+          studio_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "oauth_states_studio_id_fkey"
             columns: ["studio_id"]
             isOneToOne: false
             referencedRelation: "studios"
@@ -395,6 +527,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      disconnect_account: {
+        Args: { p_provider: string; p_studio: string }
+        Returns: undefined
+      }
       funnel_counts: {
         Args: { p_since: string; p_studio: string }
         Returns: {
