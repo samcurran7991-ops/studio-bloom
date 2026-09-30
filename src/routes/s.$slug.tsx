@@ -59,7 +59,7 @@ function Funnel({ studio }: { studio: Studio }) {
         onDone={(a) => { setAnswers(a); trackStep(studio, "quiz_done"); setView({ name: "result" }); }} />}
       {view.name === "result" && answers && <MatchResult studio={studio} answers={answers} onRetake={() => setView({ name: "quiz" })} onAction={(action) => setView({ name: "action", action })} />}
       {view.name === "action" && <div className="mx-auto max-w-xl px-5 pb-16 pt-6">
-        <Button variant="quiet" onClick={() => setView({ name: answers ? "result" : "landing" })}><ArrowLeft aria-hidden />Back</Button>
+        <Button variant="quiet" onClick={() => setView(answers ? { name: "result" } : { name: "landing" })}><ArrowLeft aria-hidden />Back</Button>
         <h1 className="mt-6 font-display text-3xl text-foreground">{view.action === "booking" && answers ? `Request ${serviceByKey(studio.config, answers.match).name}` : ACTION_TITLES[view.action]}</h1>
         <p className="mt-3 leading-7 text-muted-foreground">This form is coming in the next step.</p>
       </div>}
