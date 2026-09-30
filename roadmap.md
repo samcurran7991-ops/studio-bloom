@@ -7,4 +7,5 @@
 - [x] Add route-specific page metadata.
 - [x] Verify desktop, mobile, overlays, feedback, and dynamic paths.
 - [x] Step 1: data layer (backend set up, studio loader, visit tracking, demo fallback)
-- [ ] Step 2: studio page landing sections
+- [x] Step 2: studio page landing sections (demo studio for any slug)
+- [ ] Step 3: quiz and result page
