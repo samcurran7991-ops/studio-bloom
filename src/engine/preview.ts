@@ -66,7 +66,8 @@ export function mapStrings<T>(value: T, fn: (s: string) => string): T {
 export function previewStudio(p: PreviewParams, base: Studio = DEMO_STUDIO): Studio {
   const b = base.config
   const name = p.studio || b.name
-  const artist = p.artist || stripPlaceholders(b.artist.name) || 'Your artist'
+  // Never fall back to the sample artist's name: a prospect must not see someone else's name.
+  const artist = p.artist || 'Your artist'
   // Swap the sample studio's and artist's names everywhere they appear in the copy.
   const swap = (s: string) => s.split(b.name).join(name).split(b.artist.name).join(artist)
   const cfg: StudioConfig = mapStrings(b, swap)
@@ -133,7 +134,7 @@ export function previewSwapper(sample: StudioConfig = DEMO_STUDIO.config): ((s: 
   try { const saved = sessionStorage.getItem(DASH_KEY); if (saved) p = readPreviewParams(JSON.parse(saved) as Record<string, unknown>) } catch { return null }
   if (!p || !p.studio) return null
   const name = p.studio
-  const artist = p.artist || ''
+  const artist = p.artist || 'your artist'
   const slug = name.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   const compact = slug.replace(/-/g, '')
   const short = sample.name.replace(/\s+(Brow|Beauty|PMU)?\s*Studio$/i, '')
@@ -141,7 +142,7 @@ export function previewSwapper(sample: StudioConfig = DEMO_STUDIO.config): ((s: 
   return (s: string) => {
     let out = s.split(sample.name).join(name).split(short).join(name)
       .replace(/\/s\/arch-and-ink\b/g, '/s/' + slug).replace(/archandink|archink/g, compact)
-    if (artist) out = out.replace(artistRe, artist).replace(new RegExp('\\b' + sample.artist.name.toLowerCase() + '@', 'g'), artist.toLowerCase().replace(/[^a-z0-9]/g, '') + '@')
+    out = out.replace(artistRe, artist).replace(new RegExp('\\b' + sample.artist.name.toLowerCase() + '@', 'g'), artist.toLowerCase().replace(/[^a-z0-9]/g, '') + '@')
     return out
   }
 }

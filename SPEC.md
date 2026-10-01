@@ -161,6 +161,7 @@ Used in cold emails and personalised videos: each prospect sees the studio page 
 - No database call. The studio has the demo id, so `isDemoStudio()` is true: nothing is tracked and forms must not call `submit_lead` (show the normal "sent" screen).
 - Show a slim ribbon at the very top: "Preview made for **{studio}** · sample prices and photos · not live yet".
 - Where the real page shows placeholder photo captions, show "Your healed photo goes here" instead. Hide rating, city, hours and contact when empty.
+- With no `artist` in the link the artist is "Your artist": show the heading "Meet your artist." instead of "Hi, I'm Your artist."
 - Add `<meta name="robots" content="noindex">` and use the title "{studio} · preview". No manifest link.
 
 **Dashboard preview: `/dashboard?studio=Glow+Brows&artist=Jess` (nobody signed in)**
