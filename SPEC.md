@@ -150,3 +150,21 @@ Migrations `0001`–`0004` (tables, security, messaging, connections, sign-up). 
 | `status` | owner app | off |
 
 Server logic tests: `tests/*.test.ts` (run with Bun).
+
+---
+
+## 4. Sales preview links (for outreach to studios)
+Used in cold emails and personalised videos: each prospect sees the studio page and dashboard with their own studio's name. All logic is in `src/engine/preview.ts`.
+
+**Studio page preview: `/s/preview?studio=Glow+Brows&artist=Jess&city=Bakersfield&ig=glowbrows&rating=4.9&reviews=87`**
+- Only `studio` is needed. Read the params with `readPreviewParams(search)` and build the studio with `previewStudio(params)` (the sample studio re-dressed with their names; never shows "[brackets]").
+- No database call. The studio has the demo id, so `isDemoStudio()` is true: nothing is tracked and forms must not call `submit_lead` (show the normal "sent" screen).
+- Show a slim ribbon at the very top: "Preview made for **{studio}** · sample prices and photos · not live yet".
+- Where the real page shows placeholder photo captions, show "Your healed photo goes here" instead. Hide rating, city, hours and contact when empty.
+- Add `<meta name="robots" content="noindex">` and use the title "{studio} · preview". No manifest link.
+
+**Dashboard preview (demo mode only): `/dashboard?studio=Glow+Brows&artist=Jess`**
+- `dashboardPreviewParams(location.search)` reads the URL and remembers it for the browser tab (sessionStorage), so it survives clicking around. Apply `dashboardPreviewStudio(studio, params)` to the sample studio.
+- Pass sample texts, notes and lead details through `mapStrings(value, previewSwapper())` when `previewSwapper()` returns a function, so sample messages mention the prospect's studio, not the sample one.
+- "Open the studio page" uses `previewPageHref(src)` when it returns a link.
+- Never applies to a signed-in owner's real studio.

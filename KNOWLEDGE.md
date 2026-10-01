@@ -15,6 +15,7 @@ RULES
 - Keep on every lead form: "By sending this you agree to get texts from {studio} about your enquiry. Msg & data rates may apply. Reply STOP to opt out."
 - Ava always introduces herself as the studio's virtual (automated) receptionist. Health questions (pregnancy, allergies, skin conditions, medications, medical conditions) are answered word for word from the studio's own Health & safety FAQs (faqs with group 'health'), never by the AI and never as a personal diagnosis, always ending with 'confirm at a free consult / check with your doctor'. If the studio has no answer for that topic, the question goes to the owner.
 - Only promise texts ("Check your texts") when studio.texting is true.
+- /s/preview and /dashboard?studio=… are sales previews built with src/engine/preview.ts (SPEC section 4). They never save leads or track visits.
 - public/sw.js, public/manifest.webmanifest and public/icons power the installable app. Keep them.
 
 DESIGN

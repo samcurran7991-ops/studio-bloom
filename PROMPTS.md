@@ -318,6 +318,22 @@ Help me go live, step by step, and wait for me after each step:
 - You receive a real text on your phone after submitting a test lead with your own number.
 - Start Twilio's US business texting registration (A2P 10DLC) on day one. It takes one to three weeks.
 
+## Phase G: Sales preview links
+Personalised links for your outreach emails and videos. You can do this one any time after Prompt 6.
+
+### Prompt 18: personalised preview links
+```
+Read SPEC.md section 4 "Sales preview links" and src/engine/preview.ts. Then:
+1. Make /s/preview work: build the studio with previewStudio(readPreviewParams(location.search)) instead of loading it from the database. Add the ribbon, the noindex meta tag and the "{studio} · preview" title. Forms on the preview show the normal success screen but never call submit_lead or track anything.
+2. If the dashboard exists already, add the dashboard preview from SPEC section 4 (demo mode only). If it doesn't exist yet, remember this and add it when you build the dashboard.
+Don't change src/engine/preview.ts.
+```
+
+**Check:**
+- Open `/s/preview?studio=Glow%20Brows&artist=Jess&city=Bakersfield&rating=4.9&reviews=87`. The page says Glow Brows and Jess everywhere, with no [brackets] and no "Arch & Ink".
+- Submit the price form there, then check the dashboard: no new lead.
+- `/s/arch-and-ink` still looks normal, with no ribbon.
+
 ## If Lovable goes off track
 
 **Lovable rewrote logic it shouldn't have**
