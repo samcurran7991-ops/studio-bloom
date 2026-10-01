@@ -136,14 +136,14 @@ Build Ava, the receptionist chat, following SPEC.md ("Ava, the receptionist").
 
 - A polished chat sheet that opens from the header button, the result screen and a floating button. Typing indicator, quick-option chips under Ava's messages.
 - Use avaGreeting() and avaAnswer() from src/engine/ava.ts for replies and options. Handle every option action: say, quiz, book, lead, consult, ask, call, callback.
-- Optional AI: before using the rules, call supabase.functions.invoke('ava-chat', { body: { slug, history } }). If it returns text, use it; if it returns null or fails, use avaAnswer(). Never send a message that matches MEDICAL (from ava.ts) to the AI.
+- Optional AI: before using the rules, call supabase.functions.invoke('ava-chat', { body: { slug, history } }). If it returns text, use it; if it returns null or fails, use avaAnswer(). Never send a health question (isHealthQuestion from ava.ts) to the AI: avaAnswer() answers those from the studio's Health & safety FAQs.
 - The call view lists the team with tap-to-call links, and a callback form (who, when, name, phone, consent line) saves a lead with kind 'callback' and the chat transcript.
 - Ava introduces herself as the studio's virtual receptionist.
 ```
 
 **Check:**
 - Ask Ava "how much is microblading" → she answers with the price.
-- Ask "I have eczema, can I get brows?" → she hands off to a person (callback with the owner).
+- Ask "I have eczema, can I get brows?" → she answers from the studio's Health & safety policy and suggests a free consult or asking the owner.
 - Request a callback → you see "{person} will call you in the {time}."
 
 ## Phase B: The owner dashboard

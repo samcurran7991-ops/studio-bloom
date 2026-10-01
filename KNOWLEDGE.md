@@ -13,7 +13,7 @@ RULES
 - supabase/migrations and supabase/functions are tested (119 automated checks). Don't change table names, columns, RPCs or function code unless I ask. Use the existing RPCs: get_public_studio, submit_lead, track_step, funnel_counts, get_ingest_key, disconnect_account, slug_available, create_studio.
 - Visitors never read tables directly; they only use get_public_studio, submit_lead, track_step and the ava-chat function.
 - Keep on every lead form: "By sending this you agree to get texts from {studio} about your enquiry. Msg & data rates may apply. Reply STOP to opt out."
-- Ava always introduces herself as the studio's virtual (automated) receptionist. Medical, allergy, medication, pregnancy and skin-condition questions always go to a human and are never sent to the AI.
+- Ava always introduces herself as the studio's virtual (automated) receptionist. Health questions (pregnancy, allergies, skin conditions, medications, medical conditions) are answered word for word from the studio's own Health & safety FAQs (faqs with group 'health'), never by the AI and never as a personal diagnosis, always ending with 'confirm at a free consult / check with your doctor'. If the studio has no answer for that topic, the question goes to the owner.
 - Only promise texts ("Check your texts") when studio.texting is true.
 - public/sw.js, public/manifest.webmanifest and public/icons power the installable app. Keep them.
 

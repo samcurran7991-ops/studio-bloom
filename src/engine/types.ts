@@ -16,6 +16,8 @@ export interface Faq {
   id: string
   q: string
   a: string
+  /** 'health' = a health & safety answer Ava gives word for word (pregnancy, allergies, skin, medications, conditions). */
+  group?: 'health'
 }
 
 export interface TeamMember {

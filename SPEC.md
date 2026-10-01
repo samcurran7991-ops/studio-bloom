@@ -60,10 +60,10 @@ The matched service (`serviceByKey(config, match)`): name, price, duration, how 
 
 ### Ava, the receptionist (chat sheet, opens from the header, the result page and a floating button)
 - Rules in `src/engine/ava.ts`: the greeting is `avaGreeting(config)` with quick options; answers come from `avaAnswer(config, text)`, which returns `{ text, options[] }`. Option actions: `say` (ask that text), `quiz`, `book` (with a service), `lead`, `consult`, `ask`, `call`, `callback`.
-- Optional AI: before using the rules, call the `ava-chat` function `{ slug, history: [{from:'visitor'|'bot', text}] }`. If it returns `{ text }`, use it; if `null` or an error, use `avaAnswer`. **Never send a message matching `MEDICAL` to the AI**: those always use the rule, which hands off to a person.
+- Optional AI: before using the rules, call the `ava-chat` function `{ slug, history: [{from:'visitor'|'bot', text}] }`. If it returns `{ text }`, use it; if `null` or an error, use `avaAnswer`. **Never send a health question (`isHealthQuestion(text)` from ava.ts) to the AI**: those are answered by `avaAnswer` from the studio's Health & safety FAQs (pregnancy, allergies, skin, medications, conditions), ending with 'confirm at a free consult / check with your doctor', with a 'Free consult' and 'Ask the owner directly' (callback to the owner) option.
 - Ava always says she's the studio's virtual (automated) receptionist in the greeting.
 - **Call view:** the team from `config.team` (name, role, hours) with tap-to-call `tel:` links, plus a "Request a callback" button.
-- **Callback form:** who (team member, preselected by topic; medical → owner), when (Morning / Afternoon / Evening), name, phone, consent line → `submit_lead` with `kind: 'callback'`, `preferredTime`, `assignedTo`, and `chat` = the conversation so far. Done: "{person} will call you in the {time}." + " You'll get a text to confirm." only if texting.
+- **Callback form:** who (team member, preselected by topic; health → owner), when (Morning / Afternoon / Evening), name, phone, consent line → `submit_lead` with `kind: 'callback'`, `preferredTime`, `assignedTo`, and `chat` = the conversation so far. Done: "{person} will call you in the {time}." + " You'll get a text to confirm." only if texting.
 - Pass the chat transcript (`chat`) with any lead created from the chat.
 
 ---

@@ -45,12 +45,17 @@ export const DEMO_STUDIO: Studio = {
       { id: 'price', q: 'What does it cost in total?', a: 'The price shown includes your 6–8 week touch-up. A $50 deposit holds your time and comes off the total. [Payment plans available.]' },
       { id: 'suit', q: 'How do I know it will suit me?', a: 'We match the shape to your face and the colour to your skin and hair. Still unsure? Book the free 15-minute consult first.' },
       { id: 'last', q: 'How long does it last?', a: 'Usually 1–3 years, depending on the service and your skin. A yearly colour boost keeps it fresh.' },
-      { id: 'preg', q: 'Can I book if I am pregnant?', a: 'We wait until after pregnancy and breastfeeding. We are happy to pencil you in for later.' },
+      // Health & safety: Ava answers these word for word. Edit them to match your studio's own policy.
+      { id: 'preg', group: 'health', q: 'Can I book if I am pregnant or breastfeeding?', a: 'We don\'t do permanent makeup during pregnancy or while breastfeeding. Hormones change how your skin heals and holds colour, so we wait until you\'ve finished breastfeeding. We\'re happy to pencil you in for then.' },
+      { id: 'allergy', group: 'health', q: 'What if I have allergies?', a: 'Tell us about any allergies before your appointment, especially to numbing creams (such as lidocaine), metals or previous tattoo pigments. If you have known sensitivities, we do a small patch test a few days before.' },
+      { id: 'skin', group: 'health', q: 'Can I have it with eczema, psoriasis or rosacea?', a: 'We can\'t work on skin with an active flare-up, rash, sunburn, broken skin or active acne in the area. If your skin is calm, it\'s often fine, but we check it first. If you form keloids or raised scars, we\'ll talk it through at a consult and may ask you to check with your doctor.' },
+      { id: 'meds', group: 'health', q: 'Do medications affect it?', a: 'Some do. After Accutane (isotretinoin) we wait at least 6 months from your last dose. Stop retinol or Retin-A on the area 2 weeks before. Blood thinners can cause extra bleeding, but never stop a prescribed medicine without asking your doctor.' },
+      { id: 'conditions', group: 'health', q: 'I have a medical condition. Can I still book?', a: 'Many clients with conditions such as diabetes or autoimmune disease can have permanent makeup, sometimes with a note from their doctor. If you are having chemotherapy, we wait until your doctor gives the all-clear. Tell us about any condition when you book so we can plan safely.' },
     ],
     team: [
       { id: 'desk', role: 'Bookings and rescheduling', name: '[Front desk name]', title: 'Front desk', phone: '[(555) 000-0001]', hours: '[Tue–Sat, 9am–6pm]' },
       { id: 'artist', role: 'Treatment questions', name: 'Maya', title: 'Lead artist', phone: '[(555) 000-0002]', hours: '[Tue–Fri, 5–6pm call window]' },
-      { id: 'owner', role: 'Corrections, sensitive skin, medical questions', name: '[Owner name]', title: 'Owner', phone: '[(555) 000-0003]', hours: '[By callback]' },
+      { id: 'owner', role: 'Corrections, sensitive skin, health questions', name: '[Owner name]', title: 'Owner', phone: '[(555) 000-0003]', hours: '[By callback]' },
     ],
     reviews: {
       brows: 'I was so scared they would look fake. They look like my own brows, just better.',

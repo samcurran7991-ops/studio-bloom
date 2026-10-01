@@ -3,9 +3,13 @@ import { money } from './quiz'
 
 // Ava, the receptionist. In production the `ava-chat` Supabase function answers
 // with an AI model limited to the studio's own info. These rules are the fallback
-// (and what runs in demo mode). They follow the same hand-off policy:
+// (and what runs in demo mode). Policy:
 //  - never guess; unknown questions go to a person
-//  - anything medical always goes to a person
+//  - health questions (pregnancy, allergies, skin, medications, conditions) are answered
+//    word for word from the studio's own Health & safety answers (Settings → Questions),
+//    never by the AI, never as a personal diagnosis, always ending with "confirm at a
+//    free consult / check with your doctor". If the studio has no answer for a topic,
+//    Ava passes the question to the owner.
 
 export type AvaAction =
   | { kind: 'say'; text: string } // send as if the visitor typed it
@@ -49,19 +53,44 @@ const SERVICE_WORDS: Record<string, RegExp> = {
   correct: /correct|removal|bad brows|botched/,
 }
 
-export const MEDICAL = /medical|allerg|diabet|blood thinner|keloid|medication|accutane|chemo|skin condition|eczema|psoriasis|rosacea/
+// Health topics, in the order they're checked. Each maps to one of the studio's Health & safety answers.
+export const HEALTH_TOPICS: { id: string; re: RegExp }[] = [
+  { id: 'preg', re: /pregnan|breast ?feed|nursing|expecting a baby|trying to conceive/ },
+  { id: 'allergy', re: /allerg|patch test|reaction to|sensitive to|lidocaine|nickel/ },
+  { id: 'skin', re: /eczema|psoriasis|rosacea|keloid|dermatitis|skin condition|vitiligo|\bacne\b|rash|sunburn|raised scar/ },
+  { id: 'meds', re: /accutane|isotretinoin|blood thinner|warfarin|eliquis|aspirin|retinol|retin-?a|tretinoin|medication|medicine|antibiotic/ },
+  { id: 'conditions', re: /medical|diabet|autoimmune|lupus|chemo|cancer|bleeding disorder|hemophilia|heart condition|pacemaker|hepatitis|\bhiv\b|condition/ },
+]
+/** True for any health question. These never go to the AI. */
+export const isHealthQuestion = (text: string) => HEALTH_TOPICS.some((h) => h.re.test(text.toLowerCase()))
+/** Kept for older imports. */
+export const MEDICAL = { test: (t: string) => isHealthQuestion(t) }
+
+function healthAnswer(cfg: StudioConfig, t: string): AvaReply | null {
+  const hits = HEALTH_TOPICS.filter((h) => h.re.test(t)).map((h) => cfg.faqs.find((f) => f.id === h.id && f.a.trim())).filter(Boolean) as { a: string }[]
+  const owner = cfg.team.find((m) => m.id === 'owner') || cfg.team[cfg.team.length - 1]
+  const ownerName = !owner?.name || owner.name.includes('[') ? 'the owner' : owner.name
+  const artist = cfg.artist.name.replace(/[[\]]/g, '')
+  const consult = { label: 'Free 15-min consult', action: { kind: 'consult' } as AvaAction }
+  const askOwner = { label: `Ask ${ownerName} directly`, action: { kind: 'callback' } as AvaAction }
+  const options = [consult, askOwner]
+  if (!hits.length) {
+    // The studio hasn't written an answer for this topic yet: pass it to the owner.
+    return { text: `Good question. That depends on your health history, so ${ownerName} will answer it personally. Want a callback, or a free consult?`, options: [askOwner, consult] }
+  }
+  const body = hits.slice(0, 2).map((h) => h.a.trim()).join('\n\n')
+  return {
+    text: `${body}\n\nEveryone is a little different, so ${artist} confirms this with you at a free consult. If you're under a doctor's care, please check with them too.`,
+    options,
+  }
+}
 
 export function avaAnswer(cfg: StudioConfig, input: string): AvaReply {
   const t = input.toLowerCase()
   const faq = (id: string) => cfg.faqs.find((f) => f.id === id)?.a || ''
-  const owner = cfg.team.find((m) => m.id === 'owner') || cfg.team[cfg.team.length - 1]
   const hit = Object.keys(SERVICE_WORDS).find((k) => SERVICE_WORDS[k]!.test(t) && cfg.services.some((s) => s.key === k))
 
-  if (MEDICAL.test(t))
-    return {
-      text: `That depends on your health history, so a person should answer it. ${owner?.name || 'The owner'} handles those questions. Want to call, or ask for a callback?`,
-      options: [{ label: 'Call the right person', action: { kind: 'call' } }, { label: 'Request a callback', action: { kind: 'callback' } }],
-    }
+  if (isHealthQuestion(t)) return healthAnswer(cfg, t)!
   if (/human|person|someone|real|speak|talk to|\bcall\b|phone|number/.test(t))
     return { text: 'Of course. Here is who to call for what, with their hours.', options: [{ label: 'Show me who to call', action: { kind: 'call' } }] }
   if (hit) {
@@ -85,7 +114,6 @@ export function avaAnswer(cfg: StudioConfig, input: string): AvaReply {
     }
   if (/hurt|pain|numb/.test(t)) return { text: faq('pain'), options: [say('What is healing like?', 'healing'), { label: 'Free 15-min consult', action: { kind: 'consult' } }] }
   if (/heal|downtime|scab|flak|aftercare|go to work/.test(t)) return { text: faq('heal'), options: [say('How long does it last?'), { label: 'Find my match', action: { kind: 'quiz' } }] }
-  if (/pregnan|breastfeed|nursing/.test(t)) return { text: faq('preg'), options: [{ label: 'Talk to a person', action: { kind: 'call' } }] }
   if (/how long|\blast\b|fade/.test(t)) return { text: faq('last'), options: [say('Prices')] }
   if (/touch.?up/.test(t)) return { text: 'Your 6–8 week touch-up is included in every price.', options: [say('Prices')] }
   if (/deposit|cancel|resched|refund/.test(t))
