@@ -325,14 +325,15 @@ Personalised links for your outreach emails and videos. You can do this one any 
 ```
 Read SPEC.md section 4 "Sales preview links" and src/engine/preview.ts. Then:
 1. Make /s/preview work: build the studio with previewStudio(readPreviewParams(location.search)) instead of loading it from the database. Add the ribbon, the noindex meta tag and the "{studio} · preview" title. Forms on the preview show the normal success screen but never call submit_lead or track anything.
-2. If the dashboard exists already, add the dashboard preview from SPEC section 4 (demo mode only). If it doesn't exist yet, remember this and add it when you build the dashboard.
-Don't change src/engine/preview.ts.
+2. If the dashboard exists already, add the dashboard preview from SPEC section 4, using sampleOwnerData from src/engine/sampleData.ts. If it doesn't exist yet, remember this and add it when you build the dashboard and the phone app.
+Don't change src/engine/preview.ts or src/engine/sampleData.ts.
 ```
 
 **Check:**
 - Open `/s/preview?studio=Glow%20Brows&artist=Jess&city=Bakersfield&rating=4.9&reviews=87`. The page says Glow Brows and Jess everywhere, with no [brackets] and no "Arch & Ink".
 - Submit the price form there, then check the dashboard: no new lead.
 - `/s/arch-and-ink` still looks normal, with no ribbon.
+- Once the dashboard is built: open `/dashboard?studio=Glow%20Brows&artist=Jess` in a private window. You see the sample dashboard under Glow Brows, without signing in.
 
 ## If Lovable goes off track
 

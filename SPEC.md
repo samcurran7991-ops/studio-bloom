@@ -163,8 +163,9 @@ Used in cold emails and personalised videos: each prospect sees the studio page 
 - Where the real page shows placeholder photo captions, show "Your healed photo goes here" instead. Hide rating, city, hours and contact when empty.
 - Add `<meta name="robots" content="noindex">` and use the title "{studio} · preview". No manifest link.
 
-**Dashboard preview (demo mode only): `/dashboard?studio=Glow+Brows&artist=Jess`**
-- `dashboardPreviewParams(location.search)` reads the URL and remembers it for the browser tab (sessionStorage), so it survives clicking around. Apply `dashboardPreviewStudio(studio, params)` to the sample studio.
-- Pass sample texts, notes and lead details through `mapStrings(value, previewSwapper())` when `previewSwapper()` returns a function, so sample messages mention the prospect's studio, not the sample one.
-- "Open the studio page" uses `previewPageHref(src)` when it returns a link.
-- Never applies to a signed-in owner's real studio.
+**Dashboard preview: `/dashboard?studio=Glow+Brows&artist=Jess` (nobody signed in)**
+- When nobody is signed in and the URL has `studio`, show the full dashboard (not the sign-in screen) filled with sample data: `sampleOwnerData(previewStudio(params), location.origin)` from `src/engine/sampleData.ts` (6 leads, texts, timeline, follow-ups and Report numbers in `counts`).
+- `dashboardPreviewParams(location.search)` remembers the details for the browser tab (sessionStorage), so they survive clicking between Leads, Callbacks, Bookings, Report and settings. The same works for the phone app at `/app?studio=…`.
+- It is read-only: buttons that would save or send show a toast "This is a preview. Nothing is sent." Keep it in memory only; never write to the database.
+- Show a small "Preview" badge next to the studio name. "Open the studio page" uses `previewPageHref(src)`.
+- A signed-in owner always sees their own real studio, never a preview.
